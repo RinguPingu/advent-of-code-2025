@@ -29,13 +29,6 @@ pub enum Direction {
 }
 
 pub fn click(direction: Direction, dial: &mut Dial, num_steps: u32) {
-    let mut remaining_steps = num_steps;
-
-    println!(
-        "Dial starting at: {}\nMoving steps: {}\nDirection: {:?}",
-        dial.current_digit, num_steps, direction
-    );
-
     for _i in 0..num_steps {
         if direction == Direction::Left {
             if dial.current_digit == dial.min_digit {
@@ -49,19 +42,14 @@ pub fn click(direction: Direction, dial: &mut Dial, num_steps: u32) {
             dial.current_digit += 1;
         }
 
-        remaining_steps -= 1;
-
-        println!(
-            "Click... {}... {} steps left",
-            dial.current_digit, remaining_steps
-        );
-    }
-    if dial.current_digit == TARGET_DIGIT {
-        println!(
-            "Hit target digit! Incrementing counter to {}",
-            dial.zero_counter + 1
-        );
-        dial.zero_counter += 1;
+        println!("Click... {}", dial.current_digit);
+        if dial.current_digit == TARGET_DIGIT {
+            println!(
+                "Hit target digit! Incrementing counter to {}",
+                dial.zero_counter + 1
+            );
+            dial.zero_counter += 1;
+        }
     }
 }
 

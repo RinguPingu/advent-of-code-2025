@@ -22,6 +22,7 @@ fn main() {
     for range in ranges {
         println!("Range: {}-{}", range.0, range.1);
         for id in range.0..=range.1 {
+            // Part 1 Solution
             let id_string = id.to_string();
             let (first, last) = id_string.split_at(id_string.len() / 2);
 
@@ -32,11 +33,12 @@ fn main() {
             // println!("ID: {}\t{}|{}", id_string, first, last);
 
             if first == last {
-                println!(
-                    "ID {} is invalid:\t{} and {} are the same",
-                    id_string, first, last
-                );
-                invalid_ids.push(id);
+                part_1_invalid_ids.push(id);
+            }
+
+            // Part 2 Solution
+            if is_invalid(id) {
+                part_2_invalid_ids.push(id);
             }
         }
     }

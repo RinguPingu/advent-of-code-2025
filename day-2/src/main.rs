@@ -30,8 +30,6 @@ fn main() {
                 continue;
             }
 
-            // println!("ID: {}\t{}|{}", id_string, first, last);
-
             if first == last {
                 part_1_invalid_ids.push(id);
             }

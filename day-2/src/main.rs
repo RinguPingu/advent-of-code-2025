@@ -23,7 +23,7 @@ fn main() {
         println!("Range: {}-{}", range.0, range.1);
         for id in range.0..=range.1 {
             let id_string = id.to_string();
-            let (first, mut last) = id_string.split_at(id_string.len() / 2);
+            let (first, last) = id_string.split_at(id_string.len() / 2);
 
             if first.starts_with('0') || last.starts_with('0') {
                 continue;

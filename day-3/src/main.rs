@@ -1,4 +1,4 @@
-const MAX_BATTERIES: u32 = 2;
+const MAX_BATTERIES: u32 = 12;
 
 pub fn parse_input(path: &str) -> Vec<Vec<char>> {
     let input = std::fs::read_to_string(path).unwrap();
@@ -9,39 +9,38 @@ pub fn parse_input(path: &str) -> Vec<Vec<char>> {
         .collect()
 }
 
-pub fn find_maximum_joltage(bank: &[char]) -> u32 {
-    let mut joltages = Vec::new();
+pub fn find_maximum_joltage(bank: &[char]) -> usize {
+    let mut best_digits: Vec<usize> = Vec::new();
 
-    let mut first_index = 0;
-    let mut second_index = first_index + 1;
+    let digits: Vec<usize> = bank
+        .iter()
+        .map(|char| char.to_digit(10).unwrap() as usize)
+        .collect();
 
-    loop {
-        if first_index == second_index {
-            first_index += 1;
-            second_index = first_index + 1;
-            continue;
-        }
-
-        if let Some(first) = bank.get(first_index) {
-            if let Some(second) = bank.get(second_index) {
-                joltages.push(format!("{}{}", first, second).parse::<u32>().unwrap());
-                second_index += 1;
-            } else {
-                first_index += 1;
-                second_index = first_index + 1;
-            }
-        } else {
+    for digit in digits.iter().enumerate() {
+        if best_digits.len() == MAX_BATTERIES as usize {
             break;
+        }
+        if digits
+            .iter()
+            .skip(digit.0 + 1)
+            .filter(|d| **d > *digit.1)
+            .count()
+            < (MAX_BATTERIES as usize - best_digits.len())
+        {
+            best_digits.push(*digit.1);
         }
     }
 
-    *joltages.iter().max().unwrap()
+    assert_eq!(best_digits.len(), MAX_BATTERIES as usize);
+
+    best_digits.iter().fold(0, |acc, digit| acc * 10 + digit)
 }
 
 fn main() {
     let battery_banks = parse_input("./input/example.txt");
 
-    let max_joltages: Vec<u32> = battery_banks
+    let max_joltages: Vec<usize> = battery_banks
         .iter()
         .map(|bank| find_maximum_joltage(bank))
         .collect();
@@ -49,7 +48,7 @@ fn main() {
     for joltage in &max_joltages {
         println!("{}", joltage);
     }
-    println!("Part 1 Solution: {}", max_joltages.iter().sum::<u32>());
+    println!("Part 1 Solution: {}", max_joltages.iter().sum::<usize>());
 }
 
 #[cfg(test)]
